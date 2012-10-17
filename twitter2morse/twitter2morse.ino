@@ -1,120 +1,287 @@
 /*
- * Twitter2LCD
- * gets xml data from http://twitter.com/statuses/user_timeline/16297873.rss
- * reads the most recent tweet from field:  <title> 
- * writes the output to the LCD.
- 
- The circuit:
- * LCD RS pin to digital pin 12
- * LCD Enable pin to digital pin 11
- * LCD D4 pin to digital pin 5
- * LCD D5 pin to digital pin 4
- * LCD D6 pin to digital pin 3
- * LCD D7 pin to digital pin 2
- * 10K resistor:
- * ends to +5V and ground
- * wiper to LCD VO pin (pin 3)
 
-From http://www.instructables.com/id/Displaying-Twitter-feed-without-a-PC/ : 
-- lines 29-32 contain configuration (LCD connections, Twitter server's IP, Ethernet Shield MAC on the network): feel free to modify those as you prefer (I didn't bother adding domain name resolution to automatically change "twitter.com" to the IP every time - to keep it simple)
-- line 42 sets the LCD size, change it according to your display
-- line 54 selects the RSS feed related to my account, you can easily change it by browsing to your preferred Twitter account (you don't need to be the owner, but it must be public) and copy the link to the feed, indicated by the RSS logo
-- the main part of the sketch performs an extremely easily parsing of the xml feed, by looking for the tags and
- 
- See more here:
- http://www.arduino.cc/en/Tutorial/LiquidCrystal
- */
+My tweet2morse project.
 
+*/
+#include <ctype.h>
 
-#include <Ethernet.h>
-#include <EthernetDHCP.h>
-#include <TextFinder.h>
-#include <LiquidCrystal.h>
+char tweet[140] = "@zer0her0 just a normal tweet";
+char *morseTweet[140][10];
+int tweetLength = strlen(tweet);
+//int morseTweetLength = strlen(morseTweet);
+//int tweetLength = tweet.length();
 
-// initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
+//tweet[] = "Just a normal tweet";
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte server[] = {128,242,240,20}; // Twitter
-
-char tweet[140];
-
-Client client(server, 80);
-
-TextFinder  finder( client );  
-
-void setup()
-{
-  lcd.begin(20,4);
-  lcd.clear();
-  lcd.print("Twitter2LCD");
-  Serial.begin(9600);
-  EthernetDHCP.begin(mac);
+void setup(){
+Serial.begin(9600);
+while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+//Serial.println("\n\nString  length():");
+//Serial.ptintln();
 }
 
-
-void loop()
-{
-  lcd.clear();
-  if (client.connect()) {
-    client.println("GET http://www.twitter.com/statuses/user_timeline/16297873.rss HTTP/1.0");  // twitter rss for fgranelli
-    client.println();
-  } 
-  else {
-    lcd.println("Connection failed");
-    Serial.println("Connection failed");
-  } 
-  if (client.connected()) {
-     // get the last tweet by simply parsing the item and title tags
-     if((finder.find("<item>")&&(finder.getString("<title>","</title>",tweet,140)!=0)))
-     {  
-         Serial.println(tweet);
-         
-         for (int j=0; j<2; j++) {
-           // first part of the tweet
-           lcd.clear();
-           lcd.setCursor(0,0);
-           for (int i=0; i<20; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,1);
-           for (int i=20; i<40; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,2);
-           for (int i=40; i<60; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,3);
-           for (int i=60; i<80; i++)
-             lcd.print(tweet[i]);
-           delay(10000);
-           // second part of the tweet
-           lcd.clear();
-           lcd.setCursor(0,0);
-           for (int i=60; i<80; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,1);
-           for (int i=80; i<100; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,2);
-           for (int i=100; i<120; i++)
-             lcd.print(tweet[i]);
-           lcd.setCursor(0,3);
-           for (int i=120; i<140; i++)
-             lcd.print(tweet[i]);
-           delay(10000);
-           }
-     } 
-    else
-      lcd.println("Could not find item field"); 
+void loop(){
+//blinkled();
+for (int i = 0; i < tweetLength; i++){
+  tweet[i] = toupper(tweet[i]); 
+  Serial.println(tweet[i]); //print to console to make sure it's working
+  
+  
+  
+  /*for (int j = 0; j < 10; j++){
+    Serial.println(morseTweet[i][j]);
+  }*/
+  delay(500);
   }
-  else {
-    lcd.println("Disconnected"); 
-  }
-  client.stop();
-  client.flush(); 
-  delay(60000); // wait a minute before next update
+//Serial.println("before convert");
+//morseconvert(morseTweet);
+//Serial.println("after convert");
 }
 
+//need morse code translation library/function here
+/*void blinkled() {
+  
+}*/
 
-
-
+void morseconvert(char *morseTweet[140][10]){
+  Serial.println("before loop");
+  for (int i = 0; i < tweetLength; i++){
+    //convert to uppercase
+    //tweet[i] = toupper(tweet[i]);
+    //Serial.println(tweet[i]); //print to console to make sure it's working
+    //Serial.println("in loop");
+    //convert to morse
+    switch (tweet[i]) {
+      case 'A':
+        //do something when var equals A
+        morseTweet[i][10] = ".-";
+        break;
+      case 'B':
+        morseTweet[i][10] = "-...";
+        //do something when var equals B
+        break;
+      case 'C':
+        morseTweet[i][10] = "-.-.";
+        break;
+      case 'D':
+        morseTweet[i][10] = "-..";
+        break;
+      case 'E':
+        morseTweet[i][10] = ".";
+        break; 
+      case 'F':
+        morseTweet[i][10] = "..-.";
+        break; 
+      case 'G':
+        morseTweet[i][10] = "--.";
+        break; 
+      case 'H':
+        morseTweet[i][10] = "....";
+        break; 
+      case 'I':
+        morseTweet[i][10] = "..";
+        break; 
+      case 'J':
+        morseTweet[i][10] = ".---";
+        break; 
+      case 'K':
+        morseTweet[i][10] = "-.-";
+        break; 
+      case 'L':
+        morseTweet[i][10] = ".-..";
+        break; 
+      case 'M':
+        morseTweet[i][10] = "--";
+        break;
+      case 'N':
+        morseTweet[i][10] = "-.";
+        break; 
+      case 'O':
+        morseTweet[i][10] = "---";
+        break; 
+      case 'P':
+        morseTweet[i][10] = ".--.";
+        break; 
+      case 'Q':
+        morseTweet[i][10] = "--.-";
+        break; 
+      case 'R':
+        morseTweet[i][10] = ".-.";
+        break;
+      case 'S':
+        morseTweet[i][10] = "...";
+        break; 
+      case 'T':
+        morseTweet[i][10] = "-";
+        break; 
+      case 'U':
+        morseTweet[i][10] = "..-";
+        break; 
+      case 'V':
+        morseTweet[i][10] = "...-";
+        break; 
+      case 'W':
+        morseTweet[i][10] = ".--";
+        break; 
+      case 'X':
+        morseTweet[i][10] = "-..-";
+        break; 
+      case 'Y':
+        morseTweet[i][10] = "-.--";
+        break; 
+      case 'Z':
+        morseTweet[i][10] = "..--";
+        break; 
+      case '0':
+        morseTweet[i][10] = "----";
+        break; 
+      case '1':
+        morseTweet[i][10] = ".----";
+        break;
+      case '2':
+        morseTweet[i][10] = "..---";
+        break; 
+      case '3':
+        morseTweet[i][10] = "...--";
+        break;
+      case '4':
+        morseTweet[i][10] = "....-";
+        break;
+      case '5':
+        morseTweet[i][10] = ".....";
+        break; 
+      case '6':
+        morseTweet[i][10] = "-....";
+        break; 
+      case '7':
+        morseTweet[i][10] = "--...";
+        break; 
+      case '8':
+        morseTweet[i][10] = "---..";
+        break; 
+      case '9':
+        morseTweet[i][10] = "----.";
+        break; 
+      case '.':
+        morseTweet[i][10] = ".-.-.-";
+        break;
+      case ',':
+        morseTweet[i][10] = "--..--";
+        break;
+      case '?':
+        morseTweet[i][10] = "..--..";
+        break;
+      case '!':
+        morseTweet[i][10] = "-.-.--";
+        break;
+      case '@':
+        morseTweet[i][10] = ".--.-.";
+        break;
+      case '$':
+        morseTweet[i][10] = "...-..-";
+        break;
+      case '&':
+        morseTweet[i][10] = ".-...";
+        break;
+      case '+':
+        morseTweet[i][10] = ".-.-.";
+        break;
+      case '-':
+        morseTweet[i][10] = "-....-";
+        break;
+      case '_':
+        morseTweet[i][10] = "..--.-";
+        break;
+      case '=':
+        morseTweet[i][10] = "-...-";
+        break;
+      case ':':
+        morseTweet[i][10] = "---...";
+        break;
+      case ';':
+        morseTweet[i][10] = "-.-.-.";
+        break;
+      case '\'':
+        morseTweet[i][10] = ".----.";
+        break;
+      case '\"':
+        morseTweet[i][10] = ".-..-.";
+        break;
+      case '/':
+        morseTweet[i][10] = "-..-.";
+        break;
+      case '\\':
+        morseTweet[i][10] = "-..-.";
+        break;
+      case '(':
+        morseTweet[i][10] = "-.--.";
+        break;
+      case ')':
+        morseTweet[i][10] = "-.--.-";
+        break;
+      default: 
+        // if nothing else matches, do the default
+        // default is optional
+        break;
+    }
+  }
+}
+/*
+A = .-
+B = -...
+C = -.-.
+D = -..
+E = .
+F = ..-.
+G = --.
+H = ....
+I = ..
+J = .---
+K = -.-
+L = .-..
+M = --
+N = -.
+O = ---
+P = .--.
+Q = --.-
+R = .-.
+S = ...
+T = -
+U = ..-
+V = ...-
+W = .--
+X = -..-
+Y = -.--
+Z = ..--
+0 = ----
+1 = .----
+2 = ..---
+3 = ...--
+4 = ....-
+5 = .....
+6 = -....
+7 = --...
+8 = ---..
+9 = ----.
+. = .-.-.-
+, = --..--
+? = ..--..
+! = -.-.--
+@ = .--.-.
+$ = ...-..-
+& =  .-...
++ = .-.-.
+- = -....-
+_ = ..--.-
+//equals = = -...-
+//colon : = ---...
+//semicolon ; = -.-.-.
+//appostophe ' = .----.
+//quote " = .-..-.
+//slash / = -..-.
+//open parans ( = -.--.
+//closed parans ) = -.--.-
+*/
 
