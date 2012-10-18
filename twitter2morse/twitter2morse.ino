@@ -4,24 +4,20 @@ My tweet2morse project.
 
 */
 #include <ctype.h>
+#include <string.h>
 
-char tweet[140] = "1 normal tweet";
-String morseTweetArray[140];
-char morseTweet[0];
+const int Pin = 13; // the number of the LED pin
+const int dot = 200; // interval at which to blink (milliseconds)
+const int dash = 800; // interval at which to blink (milliseconds)
+const int space = 1000; // interval at which to blink (milliseconds)
+const int endTimes = 10000; // interval at which to blink (milliseconds)
+int State = LOW; // ledState used to set the LED
+char tweet[140] = "@zer0her0 hello there";
+//String morseTweetArray[140];
+//char morseTweetString[1] = "";
+char morseTweet[1000] = ""; // = "...---... ...---..."; // lol
 int tweetLength = strlen(tweet);
-
-void setup(){
-Serial.begin(9600);
-while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-  }
-}
-
-void loop(){
-morsetranslate();
-//blinkled();
-Serial.println(tweetLength);
-}
+int morseTweetLength = strlen(morseTweet);
 
 //need morse code translation library/function here
 void morsetranslate() {
@@ -30,68 +26,73 @@ void morsetranslate() {
   tweet[i] = toupper(tweet[i]); 
   //Serial.println(tweet[i]); //print to console to make sure it's working
   
-  if (tweet[i] == 'A') { morseTweetArray[i] = ".-"; }
-  else if (tweet[i] == 'B') { morseTweetArray[i] = "-..."; }
-  else if (tweet[i] == 'C') { morseTweetArray[i] = "-.-."; }
-  else if (tweet[i] == 'D') { morseTweetArray[i] = "-.."; }
-  else if (tweet[i] == 'E') { morseTweetArray[i] = "."; }
-  else if (tweet[i] == 'F') { morseTweetArray[i] = "..-."; }
-  else if (tweet[i] == 'G') { morseTweetArray[i] = "--."; }
-  else if (tweet[i] == 'H') { morseTweetArray[i] = "...."; }
-  else if (tweet[i] == 'I') { morseTweetArray[i] = ".."; }
-  else if (tweet[i] == 'J') { morseTweetArray[i] = ".---"; }
-  else if (tweet[i] == 'K') { morseTweetArray[i] = "-.-"; }
-  else if (tweet[i] == 'L') { morseTweetArray[i] = ".-.."; }
-  else if (tweet[i] == 'M') { morseTweetArray[i] = "--"; }
-  else if (tweet[i] == 'N') { morseTweetArray[i] = "-."; }
-  else if (tweet[i] == 'O') { morseTweetArray[i] = "---"; }
-  else if (tweet[i] == 'P') { morseTweetArray[i] = ".--."; }
-  else if (tweet[i] == 'Q') { morseTweetArray[i] = "--.-"; }
-  else if (tweet[i] == 'R') { morseTweetArray[i] = ".-."; }
-  else if (tweet[i] == 'S') { morseTweetArray[i] = "..."; }
-  else if (tweet[i] == 'T') { morseTweetArray[i] = "-"; }
-  else if (tweet[i] == 'U') { morseTweetArray[i] = "..-"; }
-  else if (tweet[i] == 'V') { morseTweetArray[i] = "...-"; }
-  else if (tweet[i] == 'W') { morseTweetArray[i] = ".--"; }
-  else if (tweet[i] == 'X') { morseTweetArray[i] = "-..-"; }
-  else if (tweet[i] == 'Y') { morseTweetArray[i] = "-.--"; }
-  else if (tweet[i] == 'Z') { morseTweetArray[i] = "..--"; }
-  else if (tweet[i] == '0') { morseTweetArray[i] = "----"; }
-  else if (tweet[i] == '1') { morseTweetArray[i] = ".----"; }
-  else if (tweet[i] == '2') { morseTweetArray[i] = "..---"; }
-  else if (tweet[i] == '3') { morseTweetArray[i] = "...--"; }
-  else if (tweet[i] == '4') { morseTweetArray[i] = "....-"; }
-  else if (tweet[i] == '5') { morseTweetArray[i] = "....."; }
-  else if (tweet[i] == '6') { morseTweetArray[i] = "-...."; }
-  else if (tweet[i] == '7') { morseTweetArray[i] = "--..."; }
-  else if (tweet[i] == '8') { morseTweetArray[i] = "---.."; }
-  else if (tweet[i] == '9') { morseTweetArray[i] = "----."; }
-  else if (tweet[i] == '.') { morseTweetArray[i] = ".-.-.-"; }
-  else if (tweet[i] == ',') { morseTweetArray[i] = "--..--"; }
-  else if (tweet[i] == '?') { morseTweetArray[i] = "..--.."; }
-  else if (tweet[i] == '!') { morseTweetArray[i] = "-.-.--"; }
-  else if (tweet[i] == '@') { morseTweetArray[i] = ".--.-."; }
-  else if (tweet[i] == '$') { morseTweetArray[i] = "...-..-"; }
-  else if (tweet[i] == '&') { morseTweetArray[i] = ".-..."; }
-  else if (tweet[i] == '+') { morseTweetArray[i] = ".-.-."; }
-  else if (tweet[i] == '-') { morseTweetArray[i] = "-....-"; }
-  else if (tweet[i] == '_') { morseTweetArray[i] = "..--.-"; }
-  else if (tweet[i] == '=') { morseTweetArray[i] = "-...-"; }
-  else if (tweet[i] == ':') { morseTweetArray[i] = "---..."; }
-  else if (tweet[i] == ';') { morseTweetArray[i] = "-.-.-."; }
-  else if (tweet[i] == '\'') { morseTweetArray[i] = ".----."; }
-  else if (tweet[i] == '\"') { morseTweetArray[i] = ".-..-."; }
-  else if (tweet[i] == '/') { morseTweetArray[i] = "-..-."; }
-  else if (tweet[i] == '\\') { morseTweetArray[i] = "-..-."; }
-  else if (tweet[i] == '(') { morseTweetArray[i] = "-.--."; }
-  else if (tweet[i] == ')') { morseTweetArray[i] = "-.--.-"; }
+  if (tweet[i] == 'A') { strcat (morseTweet, ".-"); }
+  else if (tweet[i] == 'B') { strcat (morseTweet, "-..."); }
+  else if (tweet[i] == 'C') { strcat (morseTweet, "-.-."); }
+  else if (tweet[i] == 'D') { strcat (morseTweet, "-.."); }
+  else if (tweet[i] == 'E') { strcat (morseTweet, "."); }
+  else if (tweet[i] == 'F') { strcat (morseTweet, "..-."); }
+  else if (tweet[i] == 'G') { strcat (morseTweet, "--."); }
+  else if (tweet[i] == 'H') { strcat (morseTweet, "...."); }
+  else if (tweet[i] == 'I') { strcat (morseTweet, ".."); }
+  else if (tweet[i] == 'J') { strcat (morseTweet, ".---"); }
+  else if (tweet[i] == 'K') { strcat (morseTweet, "-.-"); }
+  else if (tweet[i] == 'L') { strcat (morseTweet, ".-.."); }
+  else if (tweet[i] == 'M') { strcat (morseTweet, "--"); }
+  else if (tweet[i] == 'N') { strcat (morseTweet, "-."); }
+  else if (tweet[i] == 'O') { strcat (morseTweet, "---"); }
+  else if (tweet[i] == 'P') { strcat (morseTweet, ".--."); }
+  else if (tweet[i] == 'Q') { strcat (morseTweet, "--.-"); }
+  else if (tweet[i] == 'R') { strcat (morseTweet, ".-."); }
+  else if (tweet[i] == 'S') { strcat (morseTweet, "..."); }
+  else if (tweet[i] == 'T') { strcat (morseTweet, "-"); }
+  else if (tweet[i] == 'U') { strcat (morseTweet, "..-"); }
+  else if (tweet[i] == 'V') { strcat (morseTweet, "...-"); }
+  else if (tweet[i] == 'W') { strcat (morseTweet, ".--"); }
+  else if (tweet[i] == 'X') { strcat (morseTweet, "-..-"); }
+  else if (tweet[i] == 'Y') { strcat (morseTweet, "-.--"); }
+  else if (tweet[i] == 'Z') { strcat (morseTweet, "..--"); }
+  else if (tweet[i] == '0') { strcat (morseTweet, "----"); }
+  else if (tweet[i] == '1') { strcat (morseTweet, ".----"); }
+  else if (tweet[i] == '2') { strcat (morseTweet, "..---"); }
+  else if (tweet[i] == '3') { strcat (morseTweet, "...--"); }
+  else if (tweet[i] == '4') { strcat (morseTweet, "....-"); }
+  else if (tweet[i] == '5') { strcat (morseTweet, "....."); }
+  else if (tweet[i] == '6') { strcat (morseTweet, "-...."); }
+  else if (tweet[i] == '7') { strcat (morseTweet, "--..."); }
+  else if (tweet[i] == '8') { strcat (morseTweet, "---.."); }
+  else if (tweet[i] == '9') { strcat (morseTweet, "----."); }
+  else if (tweet[i] == '.') { strcat (morseTweet, ".-.-.-"); }
+  else if (tweet[i] == ',') { strcat (morseTweet, "--..--"); }
+  else if (tweet[i] == '?') { strcat (morseTweet, "..--.."); }
+  else if (tweet[i] == '!') { strcat (morseTweet, "-.-.--"); }
+  else if (tweet[i] == '@') { strcat (morseTweet, ".--.-."); }
+  else if (tweet[i] == '$') { strcat (morseTweet, "...-..-"); }
+  else if (tweet[i] == '&') { strcat (morseTweet, ".-..."); }
+  else if (tweet[i] == '+') { strcat (morseTweet, ".-.-."); }
+  else if (tweet[i] == '-') { strcat (morseTweet, "-....-"); }
+  else if (tweet[i] == '_') { strcat (morseTweet, "..--.-"); }
+  else if (tweet[i] == '=') { strcat (morseTweet, "-...-"); }
+  else if (tweet[i] == ':') { strcat (morseTweet, "---..."); }
+  else if (tweet[i] == ';') { strcat (morseTweet, "-.-.-."); }
+  else if (tweet[i] == '\'') { strcat (morseTweet, ".----."); }
+  else if (tweet[i] == '\"') { strcat (morseTweet, ".-..-."); }
+  else if (tweet[i] == '/') { strcat (morseTweet, "-..-."); }
+  else if (tweet[i] == '\\') { strcat (morseTweet, "-..-."); }
+  else if (tweet[i] == '(') { strcat (morseTweet, "-.--."); }
+  else if (tweet[i] == ')') { strcat (morseTweet, "-.--.-"); }
   //else if (tweet[i] == '') {  }
-  else if (tweet[i] == ' ') { morseTweetArray[i] = ""; }
-  else { morseTweetArray[i] = ""; }
+  else if (tweet[i] == ' ') { strcat (morseTweet, " "); }
+  else { /*morseTweetArray[i] = "";*/ }
   
-  Serial.println(morseTweetArray[i]);
+  //Serial.println("specific spot");
+  //Serial.println(morseTweetArray[0][1]);
+  //Serial.println("string");
+  //Serial.println(morseTweet);
   
-  //morseTweet += morseTweetArray[i];
+  //morseTweetString += morseTweetArray[i];
+  
+  
   
   delay(500);
   }
@@ -100,6 +101,52 @@ void morsetranslate() {
 }
 
 void blinkled() {
-  
+  int morseTweetLength = strlen(morseTweet);
+  for (int i = 0; i < morseTweetLength; i++){
+    if(morseTweet[i] == '.') { 
+      //Serial.println("dot!");
+      if (State == LOW) { State = HIGH; }
+      digitalWrite(Pin, State);
+      delay(dot);
+      State = LOW;
+      digitalWrite(Pin, State);
+    }
+    else if(morseTweet[i] == '-') {
+      //Serial.println("dash!"); 
+      if (State == LOW) { State = HIGH; }
+      digitalWrite(Pin, State);
+      delay(dash);
+      State = LOW;
+      digitalWrite(Pin, State);
+    }
+    else if(morseTweet[i] == ' ') {
+      //Serial.println("space!");
+      if (State == HIGH) { State = LOW; }
+      digitalWrite(Pin, State);
+      delay(space);
+    }
+    else {
+      //Serial.println("reset!");
+      State = LOW;
+      digitalWrite(Pin, State);
+      delay(endTimes);
+    }
+    delay(500);
+  }
 }
 
+void setup(){
+Serial.begin(9600);
+while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+pinMode(Pin, OUTPUT);
+}
+
+void loop(){
+morsetranslate();
+blinkled(); 
+Serial.println(morseTweet);
+Serial.println(tweetLength);
+memset(morseTweet, '\0', 1000);
+}
