@@ -4,27 +4,22 @@ My tweet2morse project.
 
 */
 #include <ctype.h>
-#include <string.h>
 
 const int Pin = 13; // the number of the LED pin
-const int dot = 200; // interval at which to blink (milliseconds)
-const int dash = 800; // interval at which to blink (milliseconds)
-const int space = 1000; // interval at which to blink (milliseconds)
-const int endTimes = 10000; // interval at which to blink (milliseconds)
-int State = LOW; // ledState used to set the LED
+const int dot = 200; // dot blink length
+const int dash = 800; // dash blink length
+const int space = 1000; // spank length
+const int endTimes = 10000; // gap before repeating
+int State = LOW; // led state used to set the LED
 char tweet[140] = "@zer0her0 hello there";
-//String morseTweetArray[140];
-//char morseTweetString[1] = "";
 char morseTweet[1000] = ""; // = "...---... ...---..."; // lol
 int tweetLength = strlen(tweet);
 int morseTweetLength = strlen(morseTweet);
 
-//need morse code translation library/function here
+//morse code translation function
 void morsetranslate() {
-  //morseTweet = "";
   for (int i = 0; i < tweetLength; i++){
   tweet[i] = toupper(tweet[i]); 
-  //Serial.println(tweet[i]); //print to console to make sure it's working
   
   if (tweet[i] == 'A') { strcat (morseTweet, ".-"); }
   else if (tweet[i] == 'B') { strcat (morseTweet, "-..."); }
@@ -84,16 +79,7 @@ void morsetranslate() {
   //else if (tweet[i] == '') {  }
   else if (tweet[i] == ' ') { strcat (morseTweet, " "); }
   else { /*morseTweetArray[i] = "";*/ }
-  
-  //Serial.println("specific spot");
-  //Serial.println(morseTweetArray[0][1]);
-  //Serial.println("string");
-  //Serial.println(morseTweet);
-  
-  //morseTweetString += morseTweetArray[i];
-  
-  
-  
+
   delay(500);
   }
   
