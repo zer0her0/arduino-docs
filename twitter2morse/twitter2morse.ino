@@ -121,6 +121,14 @@ void blinkled() {
   }
 }
 
+void soundbuzzer(){
+  //intermediate step of moving to buzzer/speaker before sounder
+}
+
+void morsesounder() {
+  //final step to make and drive a morse sounder via Arduino
+}
+
 void setup(){
 Serial.begin(9600);
 while (!Serial) {
