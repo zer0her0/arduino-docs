@@ -4,7 +4,14 @@ My tweet2morse project.
 
 */
 #include <ctype.h>
+#include <WiFi.h>
 
+// setting for WiFi shield
+char ssid[] = "myNetwork";    // update for real network before uploading.
+char pass[] = "myPassword";  // haha, this really is my network password, swear!
+int status = WL_IDE_STATUS;  // the WiFi radio's status
+
+// twitter2morse settings
 const int Pin = 13; // the number of the LED pin
 const int dot = 200; // dot blink length
 const int dash = 800; // dash blink length
@@ -134,6 +141,19 @@ Serial.begin(9600);
 while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
+
+// Attempt WiFi connection
+Serial.println("Attempting to connect to WiFi.");
+status = WiFi.begin(ssid, pass);
+
+// If times out or errors
+if (status != WL_CONNECTED) {
+  Serial.println("WiFi connection timed out.");
+  while(true);
+} else {
+  Serial.println("Connected to WiFi");
+}
+
 pinMode(Pin, OUTPUT);
 }
 
