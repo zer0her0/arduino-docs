@@ -9,7 +9,7 @@ My tweet2morse project.
 // setting for WiFi shield
 char ssid[] = "myNetwork";    // update for real network before uploading.
 char pass[] = "myPassword";  // haha, this really is my network password, swear!
-int status = WL_IDE_STATUS;  // the WiFi radio's status
+int status = WL_IDLE_STATUS;  // the WiFi radio's status
 
 // twitter2morse settings
 const int Pin = 13; // the number of the LED pin
@@ -148,7 +148,7 @@ status = WiFi.begin(ssid, pass);
 
 // If times out or errors
 if (status != WL_CONNECTED) {
-  Serial.println("WiFi connection timed out.");
+  Serial.println("WiFi connection timed out.");  // Add SSID & Password used.
   while(true);
 } else {
   Serial.println("Connected to WiFi");
