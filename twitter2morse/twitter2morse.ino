@@ -4,7 +4,7 @@ My tweet2morse project.
 
 */
 #include <ctype.h>
-#include <WiFi.h>
+#include <WiFi.h>    // Need to locate WiFi.h header file(not bundled like docs say)
 
 // setting for WiFi shield
 char ssid[] = "myNetwork";    // update for real network before uploading.
