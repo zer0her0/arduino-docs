@@ -18,15 +18,36 @@ void santapicker() {
   for (int i = 0; i < FAMILYMEM; i++) {
     //Serial.println("Yea Santa Picked");
     // pick random # between 0 & 6 and not the same as i or i's partner.
-    int randNomnom = FAMILYMEM + 1;
-    randNomnom = random(7);
-    if ( randNomnom == i ) {
+    int randNomnom = FAMILYMEM + 1;  // set as un probable #
+    randNomnom = random(7); // Pick a # 0 and 6
+    if ( randNomnom == i || randNomnom > FAMILYMEM ) {
       randNomnom = random(7);
     } else {
-      Serial.println(randNomnom);
-      santa[i] = randNomnom;
+      //Serial.println(randNomnom);
+      if ( randNomnom == 0 && i == 1) {
+        randNomnom = random(7);
+      } else if ( randNomnom == 1 && i == 0 ) {
+        randNomnom = random(7);
+      } else if ( randNomnom == 2 && i == 3 ) {
+        randNomnom = random(7);
+      } else if ( randNomnom == 3 && i == 2 ) {
+        randNomnom = random(7);
+      } else if ( randNomnom == 4 && i == 5 ) {
+        randNomnom = random(7);
+      } else if ( randNomnom == 5 && i == 6 ) {
+        randNomnom = random(7);
+      } else  if( randNomnom == 6 && i == 5 ) {
+        randNomnom = random(7);
+      } else {
+        
+      }
+      
+      //santa[i] = randNomnom;
+      //Serial.println(santa[i]);
     }
-    // Serial.println(randNomnom);
+    santa[i] = randNomnom;
+    Serial.println(santa[i]);
+    //Serial.println(randNomnom);
   }
 }
 
